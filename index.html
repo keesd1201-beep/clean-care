@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>새번호 클린케어 AI - 휴대폰핫플 개통 고객 전용 케어 서비스</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --ai-purple: #7c3aed;
+      --ai-purple-dark: #6d28d9;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --danger: #ef4444;
+      --success: #10b981;
+      --warning-bg: #fffbeb;
+      --warning-text: #b45309;
+    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Pretendard", sans-serif; }
+    body { margin: 0; background: var(--bg); color: var(--text); padding: 16px; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 480px; }
+    header { text-align: center; margin-bottom: 18px; padding-top: 6px; }
+    .badge { display: inline-block; background: #ede9fe; color: var(--ai-purple); font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 20px; margin-bottom: 8px; }
+    h1 { font-size: 22px; margin: 0 0 6px; font-weight: 800; letter-spacing: -0.5px; }
+    .subtitle { font-size: 14px; color: var(--muted); margin: 0; line-height: 1.4; }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+
+    label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+    textarea { width: 100%; height: 115px; border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-size: 14px; resize: none; outline: none; transition: border 0.2s; }
+    textarea:focus { border-color: var(--primary); }
+
+    .sample-btns { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .sample-btn { background: #f1f5f9; border: none; border-radius: 8px; padding: 6px 9px; font-size: 12px; color: #334155; cursor: pointer; font-weight: 500; }
+    .sample-btn:hover { background: #e2e8f0; }
+
+    .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+    .btn-primary { background: var(--primary); color: white; border: none; border-radius: 12px; padding: 13px 10px; font-size: 14px; font-weight: 700; cursor: pointer; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-ai { background: var(--ai-purple); color: white; border: none; border-radius: 12px; padding: 13px 10px; font-size: 14px; font-weight: 700; cursor: pointer; }
+    .btn-ai:hover { background: var(--ai-purple-dark); }
+    .btn-ai:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .result-box { display: none; animation: fadeIn 0.25s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .result-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+    .category-tag { background: #fef2f2; color: var(--danger); font-weight: 700; font-size: 13px; padding: 4px 10px; border-radius: 8px; }
+    .engine-tag { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; background: #f1f5f9; color: #475569; }
+    .engine-tag.ai { background: #ede9fe; color: var(--ai-purple); }
+
+    .info-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; align-items: center; gap: 8px; }
+    .info-label { color: var(--muted); flex-shrink: 0; }
+    .info-val { font-weight: 700; text-align: right; }
+
+    .ars-box { background: var(--warning-bg); color: var(--warning-text); border-radius: 10px; padding: 10px 12px; font-size: 13px; font-weight: 600; margin: 10px 0; display: none; line-height: 1.45; }
+    .script-box { background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 10px; padding: 12px; font-size: 13px; line-height: 1.55; color: #334155; margin: 12px 0; }
+
+    .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+    .btn-action { padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 700; text-align: center; text-decoration: none; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; }
+    .btn-call { background: var(--success); color: white; }
+    .btn-copy { background: #e2e8f0; color: var(--text); }
+
+    .db-count { text-align: center; font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+    .cs-banner { background: #1e293b; color: white; border-radius: 14px; padding: 16px; text-align: center; }
+    .cs-title { font-size: 15px; font-weight: 800; margin: 0 0 4px; color: #ffffff; }
+    .cs-sub { font-size: 12px; color: #94a3b8; margin: 0 0 10px; }
+    .cs-banner p.desc { margin: 0 0 12px; font-size: 13px; color: #e2e8f0; line-height: 1.45; }
+    .cs-btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .cs-btn { display: flex; align-items: center; justify-content: center; background: #fee500; color: #000000; font-weight: 700; font-size: 13px; padding: 11px 10px; border-radius: 10px; text-decoration: none; }
+    .cs-btn-tel { display: flex; align-items: center; justify-content: center; background: #334155; color: #ffffff; font-weight: 700; font-size: 13px; padding: 11px 10px; border-radius: 10px; text-decoration: none; border: 1px solid #475569; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="badge" id="storeBadge">휴대폰핫플 개통 고객 전용 케어 서비스</span>
+      <h1>새번호 클린케어 AI</h1>
+      <p class="subtitle">자꾸 오는 전 주인 문자, 스팸으로 막지 마세요.<br>기관 DB와 AI가 문맥을 분석해 깔끔하게 정리해 드립니다.</p>
+    </header>
+
+    <div class="card">
+      <label for="smsInput">받은 문자 내용을 그대로 붙여넣으세요</label>
+      <textarea id="smsInput" placeholder="예: [신한카드] 김*수님 11/20 14:20 일시불 35,000원 승인..."></textarea>
+
+      <div class="sample-btns">
+        <button type="button" class="sample-btn" onclick="setSample('card')">카드결제</button>
+        <button type="button" class="sample-btn" onclick="setSample('delivery')">택배알림</button>
+        <button type="button" class="sample-btn" onclick="setSample('shop')">동네가게</button>
+        <button type="button" class="sample-btn" onclick="setSample('debt')">채권추심</button>
+        <button type="button" class="sample-btn" onclick="setSample('gov')">정부안내</button>
+      </div>
+
+      <div class="btn-group">
+        <button type="button" class="btn-primary" onclick="analyzeFast()">⚡ 빠른 분석 (DB)</button>
+        <button type="button" class="btn-ai" id="aiBtn" onclick="analyzeWithGemini()">🤖 AI 정밀 분석</button>
+      </div>
+    </div>
+
+    <div class="card result-box" id="resultBox">
+      <div class="result-header">
+        <span class="category-tag" id="resCategory">카드/결제 알림</span>
+        <span class="engine-tag" id="resEngine">DB 매칭</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">발신 기관/업체</span>
+        <span class="info-val" id="resOrg">-</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">전 사용자 이름(추정)</span>
+        <span class="info-val" id="resName">-</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">권장 처리 방식</span>
+        <span class="info-val" id="resMethod" style="color:#2563eb;">-</span>
+      </div>
+
+      <div class="ars-box" id="resArs"></div>
+
+      <div class="script-box" id="resGuide"></div>
+
+      <div class="action-grid" id="actionGrid">
+        <a id="callLink" href="tel:1544-7000" class="btn-action btn-call">📞 고객센터 바로연결</a>
+        <button type="button" class="btn-action btn-copy" onclick="copyGuide()">📋 해지멘트 복사</button>
+      </div>
+    </div>
+
+    <div class="db-count">국내 주요 금융·택배·쇼핑·공공기관 <strong>105개</strong> DB + <strong>Gemini AI</strong> 탑재</div>
+
+    <div class="cs-banner">
+      <div class="cs-title" id="storeNameDisplay">포항 남구 개통 매장 케어센터</div>
+      <div class="cs-sub" id="storeAreaDisplay">경북 포항시 남구 · 개통 사후관리 전용</div>
+      <p class="desc">직접 해결이 번거로우신가요?<br>문자 캡처나 문의 내용을 보내주시면 확인 후 안내해 드립니다.</p>
+      <div class="cs-btn-group">
+        <a id="kakaoChannelLink" href="https://pf.kakao.com/" target="_blank" rel="noopener noreferrer" class="cs-btn">💬 카카오채널 문의</a>
+        <a id="storeTelLink" href="tel:054-000-0000" class="cs-btn-tel">📞 매장 전화 연결</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORE_CONFIG = {
+      storeName: "휴대폰핫플",
+      regionLabel: "휴대폰핫플 개통 고객 전용 케어 서비스",
+      subInfo: "휴대폰핫플 개통 고객 전용 케어 서비스",
+      kakaoChannelUrl: "https://pf.kakao.com/_iNIQn",
+      storePhone: "010-6795-3475"
+    };
+
+    function applyStoreConfig() {
+      document.getElementById("storeBadge").innerText = STORE_CONFIG.regionLabel;
+      document.getElementById("storeNameDisplay").innerText = STORE_CONFIG.storeName;
+      document.getElementById("storeAreaDisplay").innerText = STORE_CONFIG.subInfo;
+
+      document.getElementById("kakaoChannelLink").href = STORE_CONFIG.kakaoChannelUrl;
+      const telEl = document.getElementById("storeTelLink");
+      const cleanTel = STORE_CONFIG.storePhone.replace(/[^0-9]/g, "");
+      telEl.href = "tel:" + cleanTel;
+      telEl.innerText = "📞 " + STORE_CONFIG.storePhone;
+    }
+
+    const samples = {
+      card: "[현대카드] 박*훈님 11/20 10:15 48,500원 일시불 승인 (배달의민족) 고객센터 1577-6000",
+      delivery: "[로젠택배] 이*영님 주문하신 상품이 오늘 배송 예정입니다. 문의: 1588-9988",
+      shop: "[포항 이동 골든헤어] 최*진 고객님 11/22 토요일 13:00 컷+펌 예약 완료되었습니다. 변경/취소 054-281-4420",
+      debt: "[OO신용정보] 강*호님 연체 채권 관련 방문 및 채무확인 안내입니다. 담당자 02-555-8899 (무료수신거부 080-123-4567)",
+      gov: "[국민건강보험공단] 정*석님 2026년 국가건강검진 대상자 안내입니다. 상담 1577-1000"
+    };
+
+    const orgDB = [
+      { keywords: ["신한카드"], category: "카드/결제 알림", org: "신한카드", tel: "1544-7000", ars: "ARS 팁: 연결 후 0번(상담원) 또는 분실/기타문의 선택", warn: true },
+      { keywords: ["KB국민카드", "국민카드"], category: "카드/결제 알림", org: "KB국민카드", tel: "1588-1688", ars: "ARS 팁: 연결 후 0번(상담사 연결)", warn: true },
+      { keywords: ["삼성카드"], category: "카드/결제 알림", org: "삼성카드", tel: "1588-8700", ars: "ARS 팁: 보이는 ARS 또는 0번(상담원 연결)", warn: true },
+      { keywords: ["현대카드"], category: "카드/결제 알림", org: "현대카드", tel: "1577-6000", ars: "ARS 팁: 연결 후 0번(상담원 직접 연결)", warn: true },
+      { keywords: ["롯데카드"], category: "카드/결제 알림", org: "롯데카드", tel: "1588-8100", ars: "ARS 팁: 연결 후 0번(상담사 연결)", warn: true },
+      { keywords: ["우리카드"], category: "카드/결제 알림", org: "우리카드", tel: "1588-9955", ars: "ARS 팁: 연결 후 0번(상담원 연결)", warn: true },
+      { keywords: ["하나카드"], category: "카드/결제 알림", org: "하나카드", tel: "1800-1111", ars: "ARS 팁: 연결 후 0번(상담사 연결)", warn: true },
+      { keywords: ["NH농협카드", "농협카드"], category: "카드/결제 알림", org: "NH농협카드", tel: "1644-4000", ars: "ARS 팁: 연결 후 0번(상담원 연결)", warn: true },
+      { keywords: ["BC카드", "비씨카드"], category: "카드/결제 알림", org: "BC카드", tel: "1588-4000", ars: "ARS 팁: 연결 후 0번(상담원 연결)", warn: true },
+      { keywords: ["IBK카드", "기업은행카드"], category: "카드/결제 알림", org: "IBK기업은행 카드", tel: "1566-2566", ars: "ARS 팁: 카드문의 선택 후 0번", warn: true },
+      { keywords: ["카카오페이"], category: "간편결제 알림", org: "카카오페이", tel: "1644-7405", ars: "ARS 팁: 결제/계정 문의 선택", warn: true },
+      { keywords: ["네이버페이"], category: "간편결제 알림", org: "네이버페이", tel: "1588-3819", ars: "ARS 팁: 결제내역/도용 문의 선택", warn: true },
+      { keywords: ["토스페이", "토스"], category: "금융/간편결제", org: "토스(비바리퍼블리카)", tel: "1599-4905", ars: "ARS 팁: 24시간 상담원 연결 가능", warn: true },
+      { keywords: ["페이코", "PAYCO"], category: "간편결제 알림", org: "NHN 페이코", tel: "1544-6891", ars: "", warn: true },
+      { keywords: ["KB국민은행", "국민은행"], category: "은행 입출금/안내", org: "KB국민은행", tel: "1588-9999", ars: "ARS 팁: 연결 후 0번(상담원 연결)", warn: true },
+      { keywords: ["신한은행", "신한SOL"], category: "은행 입출금/안내", org: "신한은행", tel: "1599-8000", ars: "ARS 팁: 연결 후 0번(상담원 연결)", warn: true },
+      { keywords: ["하나은행", "하나원큐"], category: "은행 입출금/안내", org: "하나은행", tel: "1599-1111", ars: "ARS 팁: 연결 후 0번(상담사 연결)", warn: true },
+      { keywords: ["우리은행", "우리WON"], category: "은행 입출금/안내", org: "우리은행", tel: "1588-5000", ars: "ARS 팁: 연결 후 0번(상담원 연결)", warn: true },
+      { keywords: ["NH농협은행", "농협은행", "농협", "NH"], category: "은행 입출금/안내", org: "NH농협은행", tel: "1661-3000", ars: "ARS 팁: 연결 후 0번(상담원 연결)", warn: true },
+      { keywords: ["IBK기업은행", "기업은행"], category: "은행 입출금/안내", org: "IBK기업은행", tel: "1566-2566", ars: "ARS 팁: 연결 후 0번(상담원 연결)", warn: true },
+      { keywords: ["카카오뱅크", "카뱅"], category: "은행 입출금/안내", org: "카카오뱅크", tel: "1599-3333", ars: "ARS 팁: 기타문의 선택 후 상담원 연결", warn: true },
+      { keywords: ["토스뱅크"], category: "은행 입출금/안내", org: "토스뱅크", tel: "1661-7654", ars: "ARS 팁: 24시간 상담원 연결", warn: true },
+      { keywords: ["케이뱅크", "K뱅크"], category: "은행 입출금/안내", org: "케이뱅크", tel: "1522-1000", ars: "ARS 팁: 연결 후 0번(상담사 연결)", warn: true },
+      { keywords: ["SC제일은행", "제일은행"], category: "은행 입출금/안내", org: "SC제일은행", tel: "1588-1599", ars: "", warn: true },
+      { keywords: ["씨티은행"], category: "은행 입출금/안내", org: "한국씨티은행", tel: "1588-7000", ars: "", warn: true },
+      { keywords: ["수협은행", "수협"], category: "은행 입출금/안내", org: "Sh수협은행", tel: "1588-1515", ars: "", warn: true },
+      { keywords: ["새마을금고", "MG새마을"], category: "은행 입출금/안내", org: "MG새마을금고", tel: "1599-9000", ars: "", warn: true },
+      { keywords: ["신협"], category: "은행 입출금/안내", org: "신협중앙회", tel: "1566-6000", ars: "", warn: true },
+      { keywords: ["우체국예금", "우체국금융"], category: "은행 입출금/안내", org: "우체국금융", tel: "1599-1900", ars: "", warn: true },
+      { keywords: ["iM뱅크", "대구은행"], category: "은행 입출금/안내", org: "iM뱅크(구 대구은행)", tel: "1566-5050", ars: "", warn: true },
+      { keywords: ["부산은행", "BNK부산"], category: "은행 입출금/안내", org: "BNK부산은행", tel: "1588-6200", ars: "", warn: true },
+      { keywords: ["경남은행", "BNK경남"], category: "은행 입출금/안내", org: "BNK경남은행", tel: "1600-8585", ars: "", warn: true },
+      { keywords: ["광주은행"], category: "은행 입출금/안내", org: "광주은행", tel: "1588-3388", ars: "", warn: true },
+      { keywords: ["전북은행"], category: "은행 입출금/안내", org: "전북은행", tel: "1588-4477", ars: "", warn: true },
+      { keywords: ["제주은행"], category: "은행 입출금/안내", org: "제주은행", tel: "1588-0079", ars: "", warn: true },
+      { keywords: ["SBI저축은행"], category: "저축은행/금융", org: "SBI저축은행", tel: "1566-2210", ars: "", warn: true },
+      { keywords: ["OK저축은행"], category: "저축은행/금융", org: "OK저축은행", tel: "1899-7979", ars: "", warn: true },
+      { keywords: ["웰컴저축은행"], category: "저축은행/금융", org: "웰컴저축은행", tel: "1661-0001", ars: "", warn: true },
+      { keywords: ["페퍼저축은행"], category: "저축은행/금융", org: "페퍼저축은행", tel: "1599-0722", ars: "", warn: true },
+      { keywords: ["삼성화재"], category: "보험/계약 알림", org: "삼성화재", tel: "1588-5114", ars: "", warn: true },
+      { keywords: ["삼성생명"], category: "보험/계약 알림", org: "삼성생명", tel: "1588-3114", ars: "", warn: true },
+      { keywords: ["현대해상"], category: "보험/계약 알림", org: "현대해상", tel: "1588-5656", ars: "", warn: true },
+      { keywords: ["DB손해보험", "DB손보", "동부화재"], category: "보험/계약 알림", org: "DB손해보험", tel: "1588-0100", ars: "", warn: true },
+      { keywords: ["KB손해보험", "KB손보"], category: "보험/계약 알림", org: "KB손해보험", tel: "1544-0114", ars: "", warn: true },
+      { keywords: ["메리츠화재"], category: "보험/계약 알림", org: "메리츠화재", tel: "1566-7711", ars: "", warn: true },
+      { keywords: ["한화생명"], category: "보험/계약 알림", org: "한화생명", tel: "1588-6363", ars: "", warn: true },
+      { keywords: ["한화손해보험", "한화손보"], category: "보험/계약 알림", org: "한화손해보험", tel: "1566-8000", ars: "", warn: true },
+      { keywords: ["교보생명"], category: "보험/계약 알림", org: "교보생명", tel: "1588-1001", ars: "", warn: true },
+      { keywords: ["흥국화재"], category: "보험/계약 알림", org: "흥국화재", tel: "1688-1688", ars: "", warn: true },
+      { keywords: ["롯데손해보험"], category: "보험/계약 알림", org: "롯데손해보험", tel: "1588-3344", ars: "", warn: true },
+      { keywords: ["미래에셋증권", "미래에셋"], category: "증권/투자 알림", org: "미래에셋증권", tel: "1588-6800", ars: "", warn: true },
+      { keywords: ["키움증권", "영웅문"], category: "증권/투자 알림", org: "키움증권", tel: "1544-9000", ars: "", warn: true },
+      { keywords: ["삼성증권"], category: "증권/투자 알림", org: "삼성증권", tel: "1588-2323", ars: "", warn: true },
+      { keywords: ["NH투자증권", "나무증권"], category: "증권/투자 알림", org: "NH투자증권", tel: "1544-0000", ars: "", warn: true },
+      { keywords: ["한국투자증권"], category: "증권/투자 알림", org: "한국투자증권", tel: "1544-5000", ars: "", warn: true },
+      { keywords: ["KB증권"], category: "증권/투자 알림", org: "KB증권", tel: "1588-6611", ars: "", warn: true },
+      { keywords: ["토스증권"], category: "증권/투자 알림", org: "토스증권", tel: "1599-7987", ars: "", warn: true },
+      { keywords: ["CJ대한통운", "대한통운"], category: "택배/배송 알림", org: "CJ대한통운", tel: "1588-1255", ars: "ARS 팁: 배송문의 선택 후 상담원 연결", warn: false },
+      { keywords: ["우체국택배", "우체국소포"], category: "택배/배송 알림", org: "우체국택배", tel: "1588-1300", ars: "", warn: false },
+      { keywords: ["한진택배"], category: "택배/배송 알림", org: "한진택배", tel: "1588-0011", ars: "", warn: false },
+      { keywords: ["롯데택배"], category: "택배/배송 알림", org: "롯데택배", tel: "1588-2121", ars: "", warn: false },
+      { keywords: ["로젠택배"], category: "택배/배송 알림", org: "로젠택배", tel: "1588-9988", ars: "", warn: false },
+      { keywords: ["쿠팡", "로켓배송", "쿠팡친구"], category: "쇼핑/배송 알림", org: "쿠팡 고객센터", tel: "1577-7011", ars: "ARS 팁: 비회원/기타문의로 상담원 연결 가능", warn: false },
+      { keywords: ["쿠팡이츠"], category: "배달/주문 알림", org: "쿠팡이츠", tel: "1670-9827", ars: "", warn: false },
+      { keywords: ["배달의민족", "배민"], category: "배달/주문 알림", org: "배달의민족", tel: "1600-0987", ars: "", warn: false },
+      { keywords: ["요기요"], category: "배달/주문 알림", org: "요기요", tel: "1661-5270", ars: "", warn: false },
+      { keywords: ["GS편의점택배", "GS포스트박스", "반값택배"], category: "택배/배송 알림", org: "GS네트웍스(편의점택배)", tel: "1577-1287", ars: "", warn: false },
+      { keywords: ["CU편의점택배", "CU알뜰택배"], category: "택배/배송 알림", org: "CU편의점택배", tel: "1577-1287", ars: "", warn: false },
+      { keywords: ["경동택배"], category: "택배/배송 알림", org: "경동택배", tel: "1899-5368", ars: "", warn: false },
+      { keywords: ["대신택배"], category: "택배/배송 알림", org: "대신택배", tel: "043-222-4582", ars: "", warn: false },
+      { keywords: ["11번가"], category: "쇼핑/주문 알림", org: "11번가", tel: "1599-0110", ars: "", warn: false },
+      { keywords: ["G마켓", "지마켓"], category: "쇼핑/주문 알림", org: "G마켓", tel: "1566-5701", ars: "", warn: false },
+      { keywords: ["옥션"], category: "쇼핑/주문 알림", org: "옥션", tel: "1588-0184", ars: "", warn: false },
+      { keywords: ["SSG", "쓱배송", "신세계몰", "이마트몰"], category: "쇼핑/배송 알림", org: "SSG.COM", tel: "1577-3419", ars: "", warn: false },
+      { keywords: ["컬리", "마켓컬리"], category: "쇼핑/배송 알림", org: "컬리(마켓컬리)", tel: "1644-1107", ars: "", warn: false },
+      { keywords: ["올리브영"], category: "쇼핑/배송 알림", org: "CJ올리브영", tel: "1577-4887", ars: "", warn: false },
+      { keywords: ["무신사"], category: "쇼핑/주문 알림", org: "무신사", tel: "1544-7199", ars: "", warn: false },
+      { keywords: ["당근", "당근마켓"], category: "생활/거래 알림", org: "당근마켓", tel: "1544-9796", ars: "", warn: false },
+      { keywords: ["카카오T", "카카오택시", "카카오대리"], category: "교통/호출 알림", org: "카카오모빌리티", tel: "1599-9400", ars: "", warn: false },
+      { keywords: ["국민건강보험", "건강보험공단", "건보공단"], category: "정부/공공기관", org: "국민건강보험공단", tel: "1577-1000", ars: "ARS 팁: 연결 후 0번(상담사 연결)", warn: true },
+      { keywords: ["국민연금"], category: "정부/공공기관", org: "국민연금공단", tel: "1355", ars: "ARS 팁: 0번 상담원 연결", warn: true },
+      { keywords: ["국세청", "홈택스", "세무서"], category: "정부/공공기관", org: "국세청(홈택스)", tel: "126", ars: "ARS 팁: 1번(홈택스) 또는 관할 세무서 연결", warn: true },
+      { keywords: ["정부24", "행정안전부", "민원24"], category: "정부/공공기관", org: "정부24 민원콜센터", tel: "1588-2188", ars: "", warn: true },
+      { keywords: ["대법원", "법원", "등기소", "전자소송"], category: "법원/사법기관", org: "대법원 고객센터", tel: "1588-2100", ars: "ARS 팁: 사건/등기 안내 선택 후 상담원 연결", warn: true },
+      { keywords: ["경찰청", "민원실", "교통민원", "이파인"], category: "정부/공공기관", org: "경찰민원콜센터", tel: "182", ars: "", warn: true },
+      { keywords: ["병무청"], category: "정부/공공기관", org: "병무청 병무민원", tel: "1588-9090", ars: "", warn: true },
+      { keywords: ["고용노동부", "워크넷", "고용보험", "실업급여"], category: "정부/공공기관", org: "고용노동부 상담센터", tel: "1350", ars: "", warn: true },
+      { keywords: ["한국전력", "한전", "전기요금"], category: "공공요금/생활", org: "한국전력공사(KEPCO)", tel: "123", ars: "ARS 팁: 24시간 요금/명의변경 상담 가능", warn: true },
+      { keywords: ["도시가스", "영남에너지", "예스코", "코원에너지", "서울도시가스", "삼천리"], category: "공공요금/생활", org: "도시가스 고객센터", tel: "", ars: "문자 본문에 적힌 지역 도시가스 번호로 전화하세요", warn: true },
+      { keywords: ["상수도", "수도요금", "아리수"], category: "공공요금/생활", org: "지역 상수도사업본부", tel: "120", ars: "지역번호 + 120 연결", warn: true },
+      { keywords: ["한국교통안전공단", "자동차검사"], category: "정부/공공기관", org: "한국교통안전공단", tel: "1577-0990", ars: "", warn: true },
+      { keywords: ["도로교통공단", "운전면허"], category: "정부/공공기관", org: "한국도로교통공단", tel: "1577-1120", ars: "", warn: true },
+      { keywords: ["한국장학재단", "학자금"], category: "정부/공공기관", org: "한국장학재단", tel: "1599-2000", ars: "", warn: true },
+      { keywords: ["LH", "한국토지주택공사", "청약플러스"], category: "정부/공공기관", org: "LH 한국토지주택공사", tel: "1600-1004", ars: "", warn: true },
+      { keywords: ["근로복지공단", "산재"], category: "정부/공공기관", org: "근로복지공단", tel: "1588-0075", ars: "", warn: true },
+      { keywords: ["SKT", "SK텔레콤", "T월드"], category: "통신/요금 안내", org: "SK텔레콤", tel: "114", ars: "", warn: true },
+      { keywords: ["KT", "올레", "마이케이티"], category: "통신/요금 안내", org: "KT 고객센터", tel: "100", ars: "", warn: true },
+      { keywords: ["LGU+", "LG유플러스", "유플러스"], category: "통신/요금 안내", org: "LG U+ 고객센터", tel: "101", ars: "", warn: true }
+    ];
+
+    window.onload = function () {
+      applyStoreConfig();
+    };
+
+    function setSample(type) {
+      if (samples[type]) {
+        document.getElementById("smsInput").value = samples[type];
+      }
+    }
+
+    function renderResult({ category, org, name, method, warn, ars, guideHtml, tel, isAi }) {
+      document.getElementById("resCategory").innerText = category || "기타 알림";
+      document.getElementById("resOrg").innerText = org || "문자 내 발신처";
+      document.getElementById("resName").innerText = name || "미확인";
+      document.getElementById("resMethod").innerText = method;
+      document.getElementById("resMethod").style.color = warn ? "#ef4444" : "#2563eb";
+
+      const engineTag = document.getElementById("resEngine");
+      if (isAi) {
+        engineTag.innerText = "🤖 Gemini AI 분석";
+        engineTag.className = "engine-tag ai";
+      } else {
+        engineTag.innerText = "⚡ 105개 DB 매칭";
+        engineTag.className = "engine-tag";
+      }
+
+      const arsEl = document.getElementById("resArs");
+      if (ars) {
+        arsEl.innerText = "💡 " + ars;
+        arsEl.style.display = "block";
+      } else {
+        arsEl.style.display = "none";
+      }
+
+      document.getElementById("resGuide").innerHTML = guideHtml;
+
+      const callBtn = document.getElementById("callLink");
+      const actionGrid = document.getElementById("actionGrid");
+      if (tel) {
+        callBtn.href = "tel:" + tel.replace(/[^0-9]/g, "");
+        callBtn.innerText = "📞 " + tel + " 연결";
+        callBtn.style.display = "flex";
+        actionGrid.style.gridTemplateColumns = "1fr 1fr";
+      } else {
+        callBtn.style.display = "none";
+        actionGrid.style.gridTemplateColumns = "1fr";
+      }
+
+      const resultBox = document.getElementById("resultBox");
+      resultBox.style.display = "block";
+      resultBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function analyzeFast() {
+      const text = document.getElementById("smsInput").value.trim();
+      if (!text) {
+        alert("문자 내용을 먼저 붙여넣어 주세요!");
+        return;
+      }
+
+      const nameMatch = text.match(/([가-힣][*○O가-힣]{1,3})\s*(?:님|고객님|회원님)/);
+      const extractedName = nameMatch ? nameMatch[1] : "미확인 (문자 내 이름 확인)";
+      const telMatch = text.match(/(15\d{2}-\d{4}|16\d{2}-\d{4}|18\d{2}-\d{4}|0\d{1,2}-\d{3,4}-\d{4})/);
+
+      let matched = {
+        category: "동네가게/기타 알림",
+        org: "문자 내 발신처",
+        tel: telMatch ? telMatch[0] : "",
+        ars: telMatch ? "" : "DB 미등록 문자입니다. [🤖 AI 정밀 분석]을 누르면 문맥을 분석해 드립니다.",
+        warn: false
+      };
+
+      for (let item of orgDB) {
+        if (item.keywords.some(k => text.toUpperCase().includes(k.toUpperCase()))) {
+          matched = { ...item };
+          if (!matched.tel && telMatch) matched.tel = telMatch[0];
+          break;
+        }
+      }
+
+      const guideHtml = matched.warn
+        ? `<strong>[상담원 전달 멘트]</strong><br>"안녕하세요. 제가 최근 휴대폰 번호를 새로 개통했는데, 이전 번호 주인(<strong>${extractedName}</strong>)의 알림 문자가 계속 옵니다. 제 번호를 알림 발송 대상에서 삭제해 주세요."<br><br><span style="color:#ef4444; font-size:12px;">* 주의: 스팸 번호로 막으면 추후 본인 중요 알림도 차단될 수 있습니다.</span>`
+        : `<strong>[추천 해결 방법]</strong><br>1. 아래 번호로 전화해 <strong>"번호 변경으로 인한 전 사용자(${extractedName}) 정보 삭제"</strong>를 요청하세요.<br>2. 일회성/반복 안내는 메시지 앱 차단 문구에 <strong>"${extractedName}"</strong>을 등록하는 방법도 유효합니다.`;
+
+      renderResult({
+        category: matched.category,
+        org: matched.org,
+        name: extractedName,
+        method: matched.warn ? "⚠️ 스팸차단 금지 (고객센터 해지)" : "✅ 고객센터 통보 또는 키워드 차단",
+        warn: matched.warn,
+        ars: matched.ars,
+        guideHtml,
+        tel: matched.tel,
+        isAi: false
+      });
+    }
+
+    async function analyzeWithGemini() {
+      const text = document.getElementById("smsInput").value.trim();
+      if (!text) {
+        alert("문자 내용을 먼저 붙여넣어 주세요!");
+        return;
+      }
+
+      const aiBtn = document.getElementById("aiBtn");
+      aiBtn.disabled = true;
+      aiBtn.innerText = "⏳ AI 분석 중...";
+
+      try {
+        const res = await fetch("/api/analyze", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ smsText: text })
+        });
+
+        const parsed = await res.json();
+        if (!res.ok) {
+          throw new Error(parsed.error || "분석 중 오류가 발생했습니다.");
+        }
+
+        const guideHtml = `<strong>[AI 추천 해지/대응 멘트]</strong><br>"${parsed.script || `안녕하세요. 번호가 새로 개통되어 이전 사용자(${parsed.name || "전 사용자"}) 관련 안내 발송 대상에서 제 번호를 삭제해 주세요.`}"`;
+
+        renderResult({
+          category: parsed.category,
+          org: parsed.org,
+          name: parsed.name,
+          method: parsed.method_summary || (parsed.warn_block_spam ? "⚠️ 고객센터 해지 권장" : "✅ 업체 통보/차단 권장"),
+          warn: Boolean(parsed.warn_block_spam),
+          ars: parsed.ars_or_tip || "",
+          guideHtml,
+          tel: parsed.tel || "",
+          isAi: true
+        });
+      } catch (err) {
+        alert("AI 분석 중 오류가 발생했습니다:\n" + err.message + "\n[⚡ 빠른 분석 (DB)]으로 먼저 확인해 보세요.");
+      } finally {
+        aiBtn.disabled = false;
+        aiBtn.innerText = "🤖 AI 정밀 분석";
+      }
+    }
+
+    function copyGuide() {
+      const guideText = document.getElementById("resGuide").innerText;
+      const quotedMatch = guideText.match(/"([^"]+)"/);
+      const name = document.getElementById("resName").innerText;
+      const msg = quotedMatch
+        ? quotedMatch[1]
+        : `안녕하세요. 최근 휴대폰 번호를 새로 개통했는데 이전 사용자(${name})의 문자가 계속 수신됩니다. 해당 번호의 알림 발송 등록을 삭제해 주세요.`;
+
+      navigator.clipboard.writeText(msg).then(() => {
+        alert("해지 요청 멘트가 클립보드에 복사되었습니다!");
+      });
+    }
+  </script>
+</body>
+</html>
