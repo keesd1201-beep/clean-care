@@ -323,6 +323,27 @@
       const resultBox = document.getElementById("resultBox");
       resultBox.style.display = "block";
       resultBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+      logUsageToSheet({
+      engine: isAi ? "Gemini AI 분석" : "DB 매칭",
+      category: category || "기타 알림",
+      org: org || "문자 내 발신처",
+      method: method,
+      hasTel: Boolean(tel)
+    });
+  }
+
+  function logUsageToSheet(payload) {
+    const SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxsh4C25h2vGulIs0U1PgUQVswbVFPvXwCivVAesVW__g3k_v05mVkLRZ0gNROu9HB8Ig/exec";
+    if (!SHEET_WEBHOOK_URL.startsWith("https://")) return;
+
+    fetch(SHEET_WEBHOOK_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    }).catch(() => {});
+      
     }
 
     function analyzeFast() {
