@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>새번호 클린케어 AI - 휴대폰핫플 개통 고객 전용 케어 서비스</title>
+  <title>새번호 클린케어 AI - 포항 남구 개통 고객 전용 케어</title>
   <style>
     :root {
       --primary: #2563eb;
@@ -19,6 +19,8 @@
       --success: #10b981;
       --warning-bg: #fffbeb;
       --warning-text: #b45309;
+      --guide-bg: #eff6ff;
+      --guide-text: #1e40af;
     }
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Pretendard", sans-serif; }
     body { margin: 0; background: var(--bg); color: var(--text); padding: 16px; display: flex; justify-content: center; }
@@ -57,10 +59,13 @@
     .info-val { font-weight: 700; text-align: right; }
 
     .ars-box { background: var(--warning-bg); color: var(--warning-text); border-radius: 10px; padding: 10px 12px; font-size: 13px; font-weight: 600; margin: 10px 0; display: none; line-height: 1.45; }
+    .app-guide-box { background: var(--guide-bg); color: var(--guide-text); border-radius: 10px; padding: 10px 12px; font-size: 13px; font-weight: 600; margin: 10px 0; display: none; line-height: 1.45; }
     .script-box { background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 10px; padding: 12px; font-size: 13px; line-height: 1.55; color: #334155; margin: 12px 0; }
+    .auto-copy-badge { display: inline-block; margin-top: 6px; font-size: 12px; font-weight: 700; color: var(--success); }
 
     .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
-    .btn-action { padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 700; text-align: center; text-decoration: none; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; }
+    .btn-action { padding: 12px 10px; border-radius: 10px; font-size: 13px; font-weight: 700; text-align: center; text-decoration: none; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; }
+    .btn-app { background: var(--primary); color: white; }
     .btn-call { background: var(--success); color: white; }
     .btn-copy { background: #e2e8f0; color: var(--text); }
 
@@ -77,9 +82,9 @@
 <body>
   <div class="container">
     <header>
-      <span class="badge" id="storeBadge">휴대폰핫플 개통 고객 전용 케어 서비스</span>
+      <span class="badge" id="storeBadge">포항 남구 개통 고객 전용 케어</span>
       <h1>새번호 클린케어 AI</h1>
-      <p class="subtitle">자꾸 오는 전 주인 문자, 스팸으로 막지 마세요.<br>기관 DB와 AI가 문맥을 분석해 깔끔하게 정리해 드립니다.</p>
+      <p class="subtitle">자꾸 오는 전 주인 문자, 스팸으로 막지 마세요.<br>기관 DB와 AI가 분석하고 해지 멘트 복사·상담 연결까지 돕습니다.</p>
     </header>
 
     <div class="card">
@@ -120,11 +125,13 @@
       </div>
 
       <div class="ars-box" id="resArs"></div>
+      <div class="app-guide-box" id="resAppGuide"></div>
 
       <div class="script-box" id="resGuide"></div>
 
       <div class="action-grid" id="actionGrid">
-        <a id="callLink" href="tel:1544-7000" class="btn-action btn-call">📞 고객센터 바로연결</a>
+        <a id="appLink" href="#" target="_blank" rel="noopener noreferrer" class="btn-action btn-app" style="display:none;">📱 앱/상담 열기</a>
+        <a id="callLink" href="tel:1544-7000" class="btn-action btn-call">📞 고객센터 연결</a>
         <button type="button" class="btn-action btn-copy" onclick="copyGuide()">📋 해지멘트 복사</button>
       </div>
     </div>
@@ -143,10 +150,11 @@
   </div>
 
   <script>
+    // [사장님 세팅값] 기존에 입력해 두신 매장 정보와 구글 시트 웹훅 URL을 유지하세요.
     const STORE_CONFIG = {
-      storeName: "휴대폰핫플",
-      regionLabel: "휴대폰핫플 개통 고객 전용 케어 서비스",
-      subInfo: "휴대폰핫플 개통 고객 전용 케어 서비스",
+      storeName: "포항 남구 개통 매장 케어센터",
+      regionLabel: "포항 남구 개통 고객 전용 케어",
+      subInfo: "경북 포항시 남구 · 신규/번호이동 사후관리",
       kakaoChannelUrl: "https://pf.kakao.com/_iNIQn",
       storePhone: "010-6795-3475"
     };
